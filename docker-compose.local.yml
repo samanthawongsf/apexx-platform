@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: apexx-platform
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/apexx-platform?authSource=admin
+      - JWT_SECRET=local-jwt-secret-for-testing
+      - ALPHA_VANTAGE_API_KEY=demo
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:

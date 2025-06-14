@@ -1,0 +1,11 @@
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://host.docker.internal:27017/apexx-platform
+      - JWT_SECRET=local-jwt-secret-for-testing
+      - ALPHA_VANTAGE_API_KEY=demo
