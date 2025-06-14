@@ -1,62 +1,135 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Apexx Financial Platform</title>
+    <title>Apexx Financial Platform - Dashboard</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: Arial, sans-serif; 
-            max-width: 900px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 1200px; 
             margin: 0 auto; 
-            padding: 20px; 
-            background: #f5f5f5; 
+            background: white; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 30px; }
-        .status { color: #28a745; font-weight: bold; font-size: 18px; }
-        .demo-section { margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
-        .button { 
-            background: #007bff; 
+        .header { 
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             color: white; 
-            padding: 10px 20px; 
-            border: none; 
-            border-radius: 5px; 
+            padding: 30px; 
+            text-align: center; 
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .nav { 
+            background: #34495e; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .nav-item { 
+            padding: 15px 30px; 
+            color: white; 
             cursor: pointer; 
-            margin: 5px; 
+            transition: background 0.3s; 
+            border: none;
+            background: none;
+            font-size: 16px;
         }
-        .button:hover { background: #0056b3; }
-        .input { 
-            padding: 8px; 
-            margin: 5px; 
-            border: 1px solid #ddd; 
-            border-radius: 4px; 
-            width: 200px; 
-        }
-        .result { 
-            background: #e9ecef; 
-            padding: 10px; 
-            margin: 10px 0; 
-            border-radius: 4px; 
-            font-family: monospace; 
-            white-space: pre-wrap; 
-        }
-        .endpoint { 
-            background: #f5f5f5; 
-            padding: 10px; 
-            margin: 10px 0; 
-            border-radius: 5px; 
-            border-left: 4px solid #007bff; 
-        }
-        .features { 
+        .nav-item:hover, .nav-item.active { background: #2c3e50; }
+        .content { padding: 30px; min-height: 500px; }
+        .dashboard-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 15px; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 30px; 
+        }
+        .card { 
+            background: white; 
+            border-radius: 10px; 
+            padding: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            border-left: 5px solid #3498db; 
+        }
+        .card h3 { color: #2c3e50; margin-bottom: 15px; }
+        .metric { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 10px 0; 
+            padding: 10px 0; 
+            border-bottom: 1px solid #ecf0f1; 
+        }
+        .metric:last-child { border-bottom: none; }
+        .metric-value { font-weight: bold; color: #27ae60; }
+        .negative { color: #e74c3c; }
+        .table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        .table th, .table td { 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 1px solid #ecf0f1; 
+        }
+        .table th { background: #f8f9fa; color: #2c3e50; font-weight: 600; }
+        .button { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white; 
+            padding: 12px 25px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: transform 0.2s; 
+            margin: 5px; 
+        }
+        .button:hover { transform: translateY(-2px); }
+        .button.success { background: linear-gradient(135deg, #27ae60, #229954); }
+        .button.warning { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .section { display: none; }
+        .section.active { display: block; }
+        .progress-bar { 
+            background: #ecf0f1; 
+            border-radius: 10px; 
+            height: 20px; 
+            overflow: hidden; 
+            margin: 10px 0; 
+        }
+        .progress-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, #27ae60, #2ecc71); 
+            transition: width 0.3s; 
+        }
+        .stock-item, .loan-item { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 8px; 
+            border-left: 4px solid #3498db; 
+        }
+        .stock-gain { border-left-color: #27ae60; }
+        .stock-loss { border-left-color: #e74c3c; }
+        .api-demo { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 20px; 
+            border-radius: 10px; 
             margin: 20px 0; 
         }
-        .feature { 
-            background: #e8f5e8; 
+        .result { 
+            background: #34495e; 
             padding: 15px; 
-            border-radius: 8px; 
-            border-left: 4px solid #28a745; 
+            border-radius: 5px; 
+            margin: 10px 0; 
+            font-family: monospace; 
+            white-space: pre-wrap; 
+            display: none; 
         }
     </style>
 </head>
@@ -64,79 +137,341 @@
     <div class="container">
         <div class="header">
             <h1>🏦 Apexx Financial Platform</h1>
-            <p class="status">✅ API Status: Running</p>
-            <p>Interactive Demo & API Documentation</p>
+            <p>Complete Financial Management Solution</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">✅ API Status: Running | Demo User: John Doe</p>
         </div>
 
-        <!-- Interactive Demo -->
-        <div class="demo-section">
-            <h2>🚀 Try the API Live</h2>
-            
-            <div style="margin: 15px 0;">
-                <h3>1. Test Health Check</h3>
-                <button class="button" onclick="testHealth()">Test Health Endpoint</button>
-                <div id="healthResult" class="result" style="display: none;"></div>
+        <div class="nav">
+            <button class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</button>
+            <button class="nav-item" onclick="showSection('portfolio')">📈 Portfolio</button>
+            <button class="nav-item" onclick="showSection('loans')">💳 Loans</button>
+            <button class="nav-item" onclick="showSection('optimizer')">🎯 Optimizer</button>
+            <button class="nav-item" onclick="showSection('api')">🔧 API Demo</button>
+        </div>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h2>Financial Dashboard - John Doe</h2>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>💰 Net Worth Overview</h3>
+                        <div class="metric">
+                            <span>Total Assets</span>
+                            <span class="metric-value">$127,450</span>
+                        </div>
+                        <div class="metric">
+                            <span>Total Liabilities</span>
+                            <span class="metric-value negative">$45,800</span>
+                        </div>
+                        <div class="metric">
+                            <span><strong>Net Worth</strong></span>
+                            <span class="metric-value" style="font-size: 1.2em;">$81,650</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📈 Portfolio Performance</h3>
+                        <div class="metric">
+                            <span>Total Value</span>
+                            <span class="metric-value">$95,750</span>
+                        </div>
+                        <div class="metric">
+                            <span>Today's Change</span>
+                            <span class="metric-value">+$1,247 (+1.32%)</span>
+                        </div>
+                        <div class="metric">
+                            <span>Total Return</span>
+                            <span class="metric-value">+$18,550 (+24.1%)</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>💳 Debt Summary</h3>
+                        <div class="metric">
+                            <span>Total Debt</span>
+                            <span class="metric-value negative">$45,800</span>
+                        </div>
+                        <div class="metric">
+                            <span>Monthly Payments</span>
+                            <span class="metric-value negative">$1,285</span>
+                        </div>
+                        <div class="metric">
+                            <span>Payoff Timeline</span>
+                            <span class="metric-value">3.2 years</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>🎯 Monthly Goals</h3>
+                        <div style="margin: 10px 0;">
+                            <span>Emergency Fund Progress</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <small>$22,500 / $30,000</small>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <span>Debt Reduction Goal</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%;"></div>
+                            </div>
+                            <small>$2,200 / $5,000 this year</small>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div style="margin: 15px 0;">
-                <h3>2. Register New User</h3>
-                <input type="email" id="email" class="input" placeholder="Email" value="demo@apexx.com">
-                <input type="text" id="firstName" class="input" placeholder="First Name" value="Demo">
-                <input type="text" id="lastName" class="input" placeholder="Last Name" value="User">
-                <br>
-                <button class="button" onclick="registerUser()">Register User</button>
-                <div id="registerResult" class="result" style="display: none;"></div>
+            <!-- Portfolio Section -->
+            <div id="portfolio" class="section">
+                <h2>📈 Stock Portfolio</h2>
+                <div class="card">
+                    <h3>Holdings Overview</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Shares</th>
+                                <th>Avg Cost</th>
+                                <th>Current Price</th>
+                                <th>Market Value</th>
+                                <th>Gain/Loss</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>AAPL</strong> - Apple Inc.</td>
+                                <td>50</td>
+                                <td>$145.20</td>
+                                <td>$175.43</td>
+                                <td>$8,771.50</td>
+                                <td style="color: #27ae60;">+$1,511.50 (+20.8%)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GOOGL</strong> - Alphabet Inc.</td>
+                                <td>25</td>
+                                <td>$2,120.00</td>
+                                <td>$2,340.15</td>
+                                <td>$58,503.75</td>
+                                <td style="color: #27ae60;">+$5,503.75 (+10.4%)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>MSFT</strong> - Microsoft Corp.</td>
+                                <td>30</td>
+                                <td>$280.50</td>
+                                <td>$310.22</td>
+                                <td>$9,306.60</td>
+                                <td style="color: #27ae60;">+$891.60 (+10.6%)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>TSLA</strong> - Tesla Inc.</td>
+                                <td>20</td>
+                                <td>$850.00</td>
+                                <td>$795.30</td>
+                                <td>$15,906.00</td>
+                                <td style="color: #e74c3c;">-$1,094.00 (-6.4%)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>NVDA</strong> - NVIDIA Corp.</td>
+                                <td>15</td>
+                                <td>$220.00</td>
+                                <td>$415.80</td>
+                                <td>$6,237.00</td>
+                                <td style="color: #27ae60;">+$2,937.00 (+89.0%)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Loans Section -->
+            <div id="loans" class="section">
+                <h2>💳 Loan Management</h2>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>🎓 Student Loan</h3>
+                        <div class="metric">
+                            <span>Balance</span>
+                            <span class="metric-value negative">$28,500</span>
+                        </div>
+                        <div class="metric">
+                            <span>Interest Rate</span>
+                            <span>4.5%</span>
+                        </div>
+                        <div class="metric">
+                            <span>Monthly Payment</span>
+                            <span class="metric-value negative">$295</span>
+                        </div>
+                        <div class="metric">
+                            <span>Payoff Date</span>
+                            <span>March 2029</span>
+                        </div>
+                        <button class="button success">Make Payment</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>🚗 Auto Loan</h3>
+                        <div class="metric">
+                            <span>Balance</span>
+                            <span class="metric-value negative">$17,300</span>
+                        </div>
+                        <div class="metric">
+                            <span>Interest Rate</span>
+                            <span>3.2%</span>
+                        </div>
+                        <div class="metric">
+                            <span>Monthly Payment</span>
+                            <span class="metric-value negative">$385</span>
+                        </div>
+                        <div class="metric">
+                            <span>Payoff Date</span>
+                            <span>August 2027</span>
+                        </div>
+                        <button class="button success">Make Payment</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Debt Payoff Projection</h3>
+                    <p><strong>Current Strategy:</strong> Minimum payments on all loans</p>
+                    <div class="metric">
+                        <span>Total Interest (Remaining)</span>
+                        <span class="metric-value negative">$8,742</span>
+                    </div>
+                    <div class="metric">
+                        <span>Debt-Free Date</span>
+                        <span>March 2029</span>
+                    </div>
+                    <button class="button warning">Optimize Payoff Strategy</button>
+                </div>
+            </div>
+
+            <!-- Optimizer Section -->
+            <div id="optimizer" class="section">
+                <h2>🎯 Financial Optimizer</h2>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>💡 Debt Avalanche Strategy</h3>
+                        <p>Pay minimums on all debts, then focus extra payments on highest interest rate first.</p>
+                        <div class="metric">
+                            <span>Interest Saved</span>
+                            <span class="metric-value">$2,340</span>
+                        </div>
+                        <div class="metric">
+                            <span>Time Saved</span>
+                            <span class="metric-value">8 months</span>
+                        </div>
+                        <div class="metric">
+                            <span>Extra Payment Needed</span>
+                            <span class="metric-value negative">$200/month</span>
+                        </div>
+                        <button class="button">Apply Strategy</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>❄️ Debt Snowball Strategy</h3>
+                        <p>Pay minimums on all debts, then focus extra payments on smallest balance first.</p>
+                        <div class="metric">
+                            <span>Psychological Wins</span>
+                            <span class="metric-value">Auto loan paid off first</span>
+                        </div>
+                        <div class="metric">
+                            <span>Time Difference</span>
+                            <span>+3 months vs Avalanche</span>
+                        </div>
+                        <div class="metric">
+                            <span>Extra Payment Needed</span>
+                            <span class="metric-value negative">$200/month</span>
+                        </div>
+                        <button class="button">Apply Strategy</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📊 Investment Allocation</h3>
+                        <p>Optimal allocation for $2,000 monthly investment</p>
+                        <div class="metric">
+                            <span>Emergency Fund</span>
+                            <span class="metric-value">$500 (25%)</span>
+                        </div>
+                        <div class="metric">
+                            <span>Index Funds</span>
+                            <span class="metric-value">$1,200 (60%)</span>
+                        </div>
+                        <div class="metric">
+                            <span>Individual Stocks</span>
+                            <span class="metric-value">$300 (15%)</span>
+                        </div>
+                        <button class="button success">Implement Plan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Demo Section -->
+            <div id="api" class="section">
+                <div class="api-demo">
+                    <h2>🔧 Live API Testing</h2>
+                    <p>Test the actual API endpoints powering this platform</p>
+                    
+                    <div style="margin: 20px 0;">
+                        <button class="button" onclick="testHealth()">Test Health Check</button>
+                        <div id="healthResult" class="result"></div>
+                    </div>
+
+                    <div style="margin: 20px 0;">
+                        <h3>Register New User</h3>
+                        <input type="email" id="email" placeholder="Email" value="demo@apexx.com" style="padding: 8px; margin: 5px; width: 200px;">
+                        <input type="text" id="firstName" placeholder="First Name" value="Demo" style="padding: 8px; margin: 5px; width: 150px;">
+                        <input type="text" id="lastName" placeholder="Last Name" value="User" style="padding: 8px; margin: 5px; width: 150px;">
+                        <br>
+                        <button class="button" onclick="registerUser()">Register User</button>
+                        <div id="registerResult" class="result"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Available API Endpoints</h3>
+                    <table class="table">
+                        <thead>
+                            <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>GET</td><td>/health</td><td>Health check</td></tr>
+                            <tr><td>POST</td><td>/api/auth/register</td><td>User registration</td></tr>
+                            <tr><td>POST</td><td>/api/auth/login</td><td>User login</td></tr>
+                            <tr><td>POST</td><td>/api/portfolio</td><td>Create portfolio</td></tr>
+                            <tr><td>POST</td><td>/api/loans</td><td>Create loan</td></tr>
+                            <tr><td>POST</td><td>/api/optimizer/allocation</td><td>Financial optimization</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- API Documentation -->
-        <div class="demo-section">
-            <h2>📋 Available API Endpoints</h2>
-            <div class="endpoint"><strong>GET</strong> /health - Health check</div>
-            <div class="endpoint"><strong>POST</strong> /api/auth/register - User registration</div>
-            <div class="endpoint"><strong>POST</strong> /api/auth/login - User login</div>
-            <div class="endpoint"><strong>POST</strong> /api/portfolio - Create portfolio</div>
-            <div class="endpoint"><strong>POST</strong> /api/loans - Create loan</div>
-            <div class="endpoint"><strong>POST</strong> /api/optimizer/allocation - Financial optimization</div>
-        </div>
-
-        <!-- Features -->
-        <div class="demo-section">
-            <h2>✨ Platform Features</h2>
-            <div class="features">
-                <div class="feature">
-                    <h3>🔐 Authentication</h3>
-                    <p>Secure user registration and login with JWT tokens</p>
-                </div>
-                <div class="feature">
-                    <h3>📈 Portfolio Management</h3>
-                    <p>Track stocks, view real-time prices, and monitor performance</p>
-                </div>
-                <div class="feature">
-                    <h3>💰 Loan Tracking</h3>
-                    <p>Manage loans, calculate payments, and view projections</p>
-                </div>
-                <div class="feature">
-                    <h3>🎯 Financial Optimization</h3>
-                    <p>Smart algorithms for debt payoff and investment allocation</p>
-                </div>
-                <div class="feature">
-                    <h3>📱 Mobile App</h3>
-                    <p>React Native mobile application (in repository)</p>
-                </div>
-                <div class="feature">
-                    <h3>🚀 Production Ready</h3>
-                    <p>CI/CD pipeline, Docker deployment, and scalable architecture</p>
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 30px;">
+        <div style="text-align: center; padding: 20px; background: #f8f9fa; color: #7f8c8d;">
             <p><strong>GitHub Repository:</strong> <a href="https://github.com/samanthawongsf/apexx-platform" target="_blank">https://github.com/samanthawongsf/apexx-platform</a></p>
+            <p style="margin-top: 10px;">Built with Node.js, Express, MongoDB, React Native | Deployed on Railway</p>
         </div>
     </div>
 
     <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active to clicked nav item
+            event.target.classList.add('active');
+        }
+
         async function testHealth() {
             const resultDiv = document.getElementById('healthResult');
             resultDiv.style.display = 'block';
@@ -163,9 +498,7 @@
             try {
                 const response = await fetch('/api/auth/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         email: email,
                         password: 'password123',
