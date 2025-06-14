@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:5.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: apexx-platform
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - apexx-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/apexx-platform?authSource=admin
+      - JWT_SECRET=${JWT_SECRET}
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+    depends_on:
+      - mongodb
+    networks:
+      - apexx-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  apexx-network:
+    driver: bridge
