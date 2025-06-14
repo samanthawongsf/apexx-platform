@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Change this to your computer's IP address if testing on physical device
+// For simulator, localhost works fine
 const BASE_URL = 'http://localhost:3000/api';
 
 class ApiService {
@@ -18,14 +20,19 @@ class ApiService {
       config.body = JSON.stringify(config.body);
     }
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, config);
+    try {
+      const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Network error' }));
-      throw new Error(error.message || 'Something went wrong');
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(error.message || 'Something went wrong');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('API Error:', error);
+      throw error;
     }
-
-    return response.json();
   }
 
   // Auth endpoints
@@ -41,10 +48,6 @@ class ApiService {
       method: 'POST',
       body: userData,
     });
-  }
-
-  async getCurrentUser() {
-    return this.request('/auth/me');
   }
 
   // Portfolio endpoints
@@ -100,20 +103,6 @@ class ApiService {
     return this.request('/optimizer/allocation', {
       method: 'POST',
       body: { availableAmount, expectedReturn },
-    });
-  }
-
-  async getDebtAvalanche(extraAmount) {
-    return this.request('/optimizer/debt-avalanche', {
-      method: 'POST',
-      body: { extraAmount },
-    });
-  }
-
-  async getDebtSnowball(extraAmount) {
-    return this.request('/optimizer/debt-snowball', {
-      method: 'POST',
-      body: { extraAmount },
     });
   }
 }
