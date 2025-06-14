@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Apexx - Your Financial Future</title>
+    <title>apexx - the height of your financial future</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Poiret+One&family=Quicksand:wght@300..700&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            background: #f8f9fa;
             min-height: 100vh;
             padding: 20px;
             color: #2d3436;
@@ -18,7 +18,7 @@
             margin: 0 auto; 
             background: #ffffff; 
             border-radius: 20px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
             overflow: hidden;
         }
         .header { 
@@ -33,6 +33,7 @@
             margin-bottom: 5px; 
             font-weight: 400;
             letter-spacing: 2px;
+            text-transform: lowercase;
         }
         .header .subtitle { 
             font-family: 'Quicksand', sans-serif; 
@@ -40,6 +41,7 @@
             opacity: 0.9; 
             font-weight: 300;
             margin-bottom: 15px;
+            text-transform: lowercase;
         }
         .header .status { 
             font-family: 'Noto Sans Mono', monospace; 
@@ -48,7 +50,7 @@
             font-weight: 300;
         }
         .nav { 
-            background: #74b9ff; 
+            background: #636e72; 
             padding: 0; 
             display: flex; 
             justify-content: center; 
@@ -67,13 +69,13 @@
         }
         .nav-item:hover { background: rgba(255,255,255,0.1); }
         .nav-item.active { background: rgba(255,255,255,0.2); border-bottom: 3px solid white; }
-        .content { padding: 40px; min-height: 500px; }
+        .content { padding: 40px 40px 20px 40px; min-height: 500px; }
         .dashboard-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             grid-template-rows: 1fr 1fr;
             gap: 25px; 
-            margin-bottom: 30px; 
+            margin-bottom: 20px; 
             height: 500px;
         }
         .card { 
@@ -205,21 +207,59 @@
         }
         .footer { 
             text-align: center; 
-            padding: 25px; 
+            padding: 15px 25px; 
             background: #f8f9fa; 
             color: #636e72; 
             font-family: 'Quicksand', sans-serif;
             font-weight: 400;
+            font-size: 0.9em;
+            border-top: 1px solid #e9ecef;
         }
         .footer a { color: #74b9ff; text-decoration: none; font-weight: 500; }
         .footer a:hover { text-decoration: underline; }
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover { color: #000; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Apexx</h1>
-            <p class="subtitle">Your Financial Future</p>
+            <h1>apexx</h1>
+            <p class="subtitle">the height of your financial future</p>
             <p class="status">✅ API Status: Running | Demo User: John Doe</p>
         </div>
 
@@ -388,7 +428,7 @@
                             <span class="metric-label">Payoff Date</span>
                             <span class="metric-value">March 2029</span>
                         </div>
-                        <button class="button success">Make Payment</button>
+                        <button class="button success" onclick="makePayment('student')">Make Payment</button>
                     </div>
 
                     <div class="card">
@@ -409,7 +449,7 @@
                             <span class="metric-label">Payoff Date</span>
                             <span class="metric-value">August 2027</span>
                         </div>
-                        <button class="button success">Make Payment</button>
+                        <button class="button success" onclick="makePayment('auto')">Make Payment</button>
                     </div>
                 </div>
 
@@ -424,7 +464,7 @@
                         <span class="metric-label">Debt-Free Date</span>
                         <span class="metric-value">March 2029</span>
                     </div>
-                    <button class="button warning">Optimize Payoff Strategy</button>
+                    <button class="button warning" onclick="optimizeStrategy()">Optimize Payoff Strategy</button>
                 </div>
             </div>
 
@@ -447,7 +487,7 @@
                             <span class="metric-label">Extra Payment Needed</span>
                             <span class="metric-value negative">$200/month</span>
                         </div>
-                        <button class="button">Apply Strategy</button>
+                        <button class="button" onclick="applyStrategy('avalanche')">Apply Strategy</button>
                     </div>
 
                     <div class="card">
@@ -465,7 +505,7 @@
                             <span class="metric-label">Extra Payment Needed</span>
                             <span class="metric-value negative">$200/month</span>
                         </div>
-                        <button class="button">Apply Strategy</button>
+                        <button class="button" onclick="applyStrategy('snowball')">Apply Strategy</button>
                     </div>
 
                     <div class="card">
@@ -483,7 +523,7 @@
                             <span class="metric-label">Individual Stocks</span>
                             <span class="metric-value">$300 (15%)</span>
                         </div>
-                        <button class="button success">Implement Plan</button>
+                        <button class="button success" onclick="implementPlan()">Implement Plan</button>
                     </div>
                 </div>
             </div>
@@ -531,7 +571,17 @@
 
         <div class="footer">
             <p><strong>GitHub Repository:</strong> <a href="https://github.com/samanthawongsf/apexx-platform" target="_blank">https://github.com/samanthawongsf/apexx-platform</a></p>
-            <p style="margin-top: 10px;">Built with Node.js, Express, MongoDB, React Native | Deployed on Railway</p>
+            <p>Built with Node.js, Express, MongoDB, React Native | Deployed on Railway</p>
+        </div>
+    </div>
+
+    <!-- Modal for confirmations -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Action Completed</h3>
+            <p id="modalMessage">Your action has been processed successfully.</p>
+            <button class="button" onclick="closeModal()">Close</button>
         </div>
     </div>
 
@@ -547,6 +597,35 @@
             
             document.getElementById(sectionId).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('confirmModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        function makePayment(loanType) {
+            const loanName = loanType === 'student' ? 'Student Loan' : 'Auto Loan';
+            const amount = loanType === 'student' ? '$295' : '$385';
+            showModal('Payment Processed', `Your ${amount} payment for ${loanName} has been successfully processed. Updated balance will be reflected in your dashboard.`);
+        }
+
+        function optimizeStrategy() {
+            showModal('Strategy Optimization', 'Debt payoff strategy has been optimized! Based on your current debts, the Debt Avalanche method will save you $2,340 in interest and 8 months of payments.');
+        }
+
+        function applyStrategy(strategyType) {
+            const strategyName = strategyType === 'avalanche' ? 'Debt Avalanche' : 'Debt Snowball';
+            showModal('Strategy Applied', `${strategyName} strategy has been applied to your debt management plan. Your payment schedule has been updated accordingly.`);
+        }
+
+        function implementPlan() {
+            showModal('Investment Plan Implemented', 'Your optimal investment allocation plan has been implemented. Automatic monthly investments of $2,000 will be distributed according to your optimized strategy.');
         }
 
         async function testHealth() {
@@ -592,6 +671,14 @@
                 }
             } catch (error) {
                 resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('confirmModal');
+            if (event.target == modal) {
+                closeModal();
             }
         }
     </script>
