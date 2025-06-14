@@ -3,33 +3,187 @@
 <head>
     <title>Apexx Financial Platform</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .endpoint { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 5px; }
-        .status { color: green; font-weight: bold; }
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .status { color: #28a745; font-weight: bold; font-size: 18px; }
+        .demo-section { margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+        .button { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 5px; 
+        }
+        .button:hover { background: #0056b3; }
+        .input { 
+            padding: 8px; 
+            margin: 5px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            width: 200px; 
+        }
+        .result { 
+            background: #e9ecef; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px; 
+            font-family: monospace; 
+            white-space: pre-wrap; 
+        }
+        .endpoint { 
+            background: #f5f5f5; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            border-left: 4px solid #007bff; 
+        }
+        .features { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 15px; 
+            margin: 20px 0; 
+        }
+        .feature { 
+            background: #e8f5e8; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border-left: 4px solid #28a745; 
+        }
     </style>
 </head>
 <body>
-    <h1>🏦 Apexx Financial Platform</h1>
-    <p class="status">✅ API Status: Running</p>
-    
-    <h2>Available API Endpoints:</h2>
-    <div class="endpoint"><strong>GET</strong> /health - Health check</div>
-    <div class="endpoint"><strong>POST</strong> /api/auth/register - User registration</div>
-    <div class="endpoint"><strong>POST</strong> /api/auth/login - User login</div>
-    <div class="endpoint"><strong>POST</strong> /api/portfolio - Create portfolio</div>
-    <div class="endpoint"><strong>POST</strong> /api/loans - Create loan</div>
-    <div class="endpoint"><strong>POST</strong> /api/optimizer/allocation - Financial optimization</div>
-    
-    <h2>Features:</h2>
-    <ul>
-        <li>✅ User Authentication System</li>
-        <li>✅ Stock Portfolio Management</li>
-        <li>✅ Loan Tracking & Payment Calculations</li>
-        <li>✅ Financial Optimization Algorithms</li>
-        <li>✅ React Native Mobile App (in repository)</li>
-        <li>✅ Production-ready deployment</li>
-    </ul>
-    
-    <p><strong>GitHub Repository:</strong> <a href="https://github.com/samanthawongsf/apexx-platform">https://github.com/samanthawongsf/apexx-platform</a></p>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 Apexx Financial Platform</h1>
+            <p class="status">✅ API Status: Running</p>
+            <p>Interactive Demo & API Documentation</p>
+        </div>
+
+        <!-- Interactive Demo -->
+        <div class="demo-section">
+            <h2>🚀 Try the API Live</h2>
+            
+            <div style="margin: 15px 0;">
+                <h3>1. Test Health Check</h3>
+                <button class="button" onclick="testHealth()">Test Health Endpoint</button>
+                <div id="healthResult" class="result" style="display: none;"></div>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <h3>2. Register New User</h3>
+                <input type="email" id="email" class="input" placeholder="Email" value="demo@apexx.com">
+                <input type="text" id="firstName" class="input" placeholder="First Name" value="Demo">
+                <input type="text" id="lastName" class="input" placeholder="Last Name" value="User">
+                <br>
+                <button class="button" onclick="registerUser()">Register User</button>
+                <div id="registerResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="demo-section">
+            <h2>📋 Available API Endpoints</h2>
+            <div class="endpoint"><strong>GET</strong> /health - Health check</div>
+            <div class="endpoint"><strong>POST</strong> /api/auth/register - User registration</div>
+            <div class="endpoint"><strong>POST</strong> /api/auth/login - User login</div>
+            <div class="endpoint"><strong>POST</strong> /api/portfolio - Create portfolio</div>
+            <div class="endpoint"><strong>POST</strong> /api/loans - Create loan</div>
+            <div class="endpoint"><strong>POST</strong> /api/optimizer/allocation - Financial optimization</div>
+        </div>
+
+        <!-- Features -->
+        <div class="demo-section">
+            <h2>✨ Platform Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🔐 Authentication</h3>
+                    <p>Secure user registration and login with JWT tokens</p>
+                </div>
+                <div class="feature">
+                    <h3>📈 Portfolio Management</h3>
+                    <p>Track stocks, view real-time prices, and monitor performance</p>
+                </div>
+                <div class="feature">
+                    <h3>💰 Loan Tracking</h3>
+                    <p>Manage loans, calculate payments, and view projections</p>
+                </div>
+                <div class="feature">
+                    <h3>🎯 Financial Optimization</h3>
+                    <p>Smart algorithms for debt payoff and investment allocation</p>
+                </div>
+                <div class="feature">
+                    <h3>📱 Mobile App</h3>
+                    <p>React Native mobile application (in repository)</p>
+                </div>
+                <div class="feature">
+                    <h3>🚀 Production Ready</h3>
+                    <p>CI/CD pipeline, Docker deployment, and scalable architecture</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <p><strong>GitHub Repository:</strong> <a href="https://github.com/samanthawongsf/apexx-platform" target="_blank">https://github.com/samanthawongsf/apexx-platform</a></p>
+        </div>
+    </div>
+
+    <script>
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                resultDiv.textContent = `✅ Success!\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        async function registerUser() {
+            const resultDiv = document.getElementById('registerResult');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Registering...';
+            
+            const email = document.getElementById('email').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: 'password123',
+                        firstName: firstName,
+                        lastName: lastName
+                    })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    resultDiv.textContent = `✅ User registered successfully!\n${JSON.stringify(data, null, 2)}`;
+                } else {
+                    resultDiv.textContent = `⚠️ ${data.message || 'Registration failed'}`;
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+    </script>
 </body>
 </html>
