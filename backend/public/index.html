@@ -52,6 +52,21 @@
             opacity: 0.7; 
             font-weight: 300;
         }
+        .user-actions {
+            margin-top: 10px;
+        }
+        .user-btn {
+            background: #636e72;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            margin: 0 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .user-btn:hover { background: #2d3436; }
         .nav { 
             background: #636e72; 
             padding: 0; 
@@ -109,7 +124,24 @@
             font-weight: 600;
             font-size: 1.1em;
             flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+        .add-btn {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .add-btn:hover { background: #0984e3; }
         .metric { 
             display: flex; 
             justify-content: space-between; 
@@ -235,15 +267,6 @@
         }
         .footer a { color: #74b9ff; text-decoration: none; font-weight: 500; }
         .footer a:hover { text-decoration: underline; }
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 10px 12px;
-            border-radius: 6px;
-            margin: 8px 0;
-            font-size: 0.8em;
-        }
         .modal {
             display: none;
             position: fixed;
@@ -256,11 +279,27 @@
         }
         .modal-content {
             background-color: white;
-            margin: 15% auto;
+            margin: 10% auto;
             padding: 25px;
             border-radius: 12px;
-            width: 350px;
-            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .form-row input, .form-row select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
             font-family: 'Quicksand', sans-serif;
         }
         .close {
@@ -277,6 +316,60 @@
             font-weight: 600; 
             color: #2d3436;
             font-size: 1.4em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .auth-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: 'Fustat', sans-serif;
+            font-size: 2em;
+        }
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .auth-form button {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: #74b9ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .auth-form button:hover { background: #0984e3; }
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #74b9ff;
+            cursor: pointer;
+        }
+        .stock-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #74b9ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
@@ -286,6 +379,10 @@
             <h1>Apexx</h1>
             <p class="subtitle">the height of your financial future</p>
             <p class="status">✅ API Status: Running | Demo User: John Doe</p>
+            <div class="user-actions">
+                <button class="user-btn" onclick="showAuth('login')">Login Demo</button>
+                <button class="user-btn" onclick="showAuth('register')">Register Demo</button>
+            </div>
         </div>
 
         <div class="nav">
@@ -293,6 +390,7 @@
             <button class="nav-item" onclick="showSection('portfolio')">📈 Portfolio</button>
             <button class="nav-item" onclick="showSection('loans')">💳 Loans</button>
             <button class="nav-item" onclick="showSection('optimizer')">🎯 Optimizer</button>
+            <button class="nav-item" onclick="showSection('goals')">🏆 Goals</button>
             <button class="nav-item" onclick="showSection('api')">🔧 API Demo</button>
         </div>
 
@@ -371,7 +469,10 @@
 
             <!-- Portfolio Section -->
             <div id="portfolio" class="section">
-                <h2 class="section-title">📈 Stock Portfolio</h2>
+                <h2 class="section-title">
+                    📈 Stock Portfolio
+                    <button class="button success" onclick="showModal('addStock')">+ Add Stock</button>
+                </h2>
                 <div class="card" style="flex: 1;">
                     <h3>Holdings Overview</h3>
                     <table class="table">
@@ -385,7 +486,7 @@
                                 <th>Gain/Loss</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="stockTableBody">
                             <tr>
                                 <td><strong>AAPL</strong> - Apple Inc.</td>
                                 <td>50</td>
@@ -433,8 +534,11 @@
 
             <!-- Loans Section -->
             <div id="loans" class="section">
-                <h2 class="section-title">💳 Loan Management</h2>
-                <div class="portfolio-grid">
+                <h2 class="section-title">
+                    💳 Loan Management
+                    <button class="button success" onclick="showModal('addLoan')">+ Add Loan</button>
+                </h2>
+                <div class="portfolio-grid" id="loansGrid">
                     <div class="card">
                         <h3>🎓 Student Loan</h3>
                         <div class="metric">
@@ -490,6 +594,84 @@
                         <span class="metric-value">March 2029</span>
                     </div>
                     <button class="button warning" onclick="optimizeStrategy()">Optimize Payoff Strategy</button>
+                </div>
+            </div>
+
+            <!-- Goals Section -->
+            <div id="goals" class="section">
+                <h2 class="section-title">
+                    🏆 Financial Goals
+                    <button class="button success" onclick="showModal('addGoal')">+ Add Goal</button>
+                </h2>
+                <div class="portfolio-grid" id="goalsGrid">
+                    <div class="card">
+                        <h3>🏠 House Down Payment</h3>
+                        <div class="metric">
+                            <span class="metric-label">Target Amount</span>
+                            <span class="metric-value">$50,000</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Current Progress</span>
+                            <span class="metric-value positive">$18,500 (37%)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Monthly Savings</span>
+                            <span class="metric-value">$800</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Target Date</span>
+                            <span class="metric-value">December 2026</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 37%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>🌴 Vacation Fund</h3>
+                        <div class="metric">
+                            <span class="metric-label">Target Amount</span>
+                            <span class="metric-value">$8,000</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Current Progress</span>
+                            <span class="metric-value positive">$3,200 (40%)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Monthly Savings</span>
+                            <span class="metric-value">$400</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Target Date</span>
+                            <span class="metric-value">July 2025</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 40%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>🔮 Retirement Boost</h3>
+                        <div class="metric">
+                            <span class="metric-label">Target Amount</span>
+                            <span class="metric-value">$100,000</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Current Progress</span>
+                            <span class="metric-value positive">$45,000 (45%)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Monthly Savings</span>
+                            <span class="metric-value">$1,200</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Target Date</span>
+                            <span class="metric-value">January 2029</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -600,13 +782,98 @@
         </div>
     </div>
 
-    <!-- Modal for confirmations -->
+    <!-- Modals -->
+    <!-- Add Stock Modal -->
+    <div id="addStockModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addStockModal')">&times;</span>
+            <h3>Add New Stock</h3>
+            <div class="form-row">
+                <input type="text" id="stockSymbol" placeholder="Stock Symbol (e.g., AAPL)">
+                <input type="number" id="stockShares" placeholder="Number of Shares">
+            </div>
+            <div class="form-row">
+                <input type="number" id="stockPrice" placeholder="Purchase Price" step="0.01">
+            </div>
+            <button class="button success" onclick="addStock()">Add Stock</button>
+            <button class="button" onclick="closeModal('addStockModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Add Loan Modal -->
+    <div id="addLoanModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addLoanModal')">&times;</span>
+            <h3>Add New Loan</h3>
+            <div class="form-row">
+                <input type="text" id="loanName" placeholder="Loan Name">
+                <select id="loanType">
+                    <option value="student">Student Loan</option>
+                    <option value="auto">Auto Loan</option>
+                    <option value="mortgage">Mortgage</option>
+                    <option value="personal">Personal Loan</option>
+                    <option value="credit">Credit Card</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="number" id="loanBalance" placeholder="Current Balance" step="0.01">
+                <input type="number" id="loanRate" placeholder="Interest Rate %" step="0.01">
+            </div>
+            <div class="form-row">
+                <input type="number" id="loanPayment" placeholder="Monthly Payment" step="0.01">
+            </div>
+            <button class="button success" onclick="addLoan()">Add Loan</button>
+            <button class="button" onclick="closeModal('addLoanModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Add Goal Modal -->
+    <div id="addGoalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addGoalModal')">&times;</span>
+            <h3>Add New Financial Goal</h3>
+            <div class="form-row">
+                <input type="text" id="goalName" placeholder="Goal Name">
+                <select id="goalType">
+                    <option value="🏠">🏠 House/Property</option>
+                    <option value="🚗">🚗 Vehicle</option>
+                    <option value="🌴">�� Vacation</option>
+                    <option value="🎓">🎓 Education</option>
+                    <option value="🔮">🔮 Retirement</option>
+                    <option value="💍">💍 Wedding</option>
+                    <option value="🏥">🏥 Emergency Fund</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="number" id="goalTarget" placeholder="Target Amount" step="0.01">
+                <input type="number" id="goalCurrent" placeholder="Current Amount" step="0.01">
+            </div>
+            <div class="form-row">
+                <input type="date" id="goalDate">
+                <input type="number" id="goalMonthly" placeholder="Monthly Contribution" step="0.01">
+            </div>
+            <button class="button success" onclick="addGoal()">Add Goal</button>
+            <button class="button" onclick="closeModal('addGoalModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('authModal')">&times;</span>
+            <div id="authContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
     <div id="confirmModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal('confirmModal')">&times;</span>
             <h3 id="modalTitle">Action Completed</h3>
             <p id="modalMessage">Your action has been processed successfully.</p>
-            <button class="button" onclick="closeModal()">Close</button>
+            <button class="button" onclick="closeModal('confirmModal')">Close</button>
         </div>
     </div>
 
@@ -624,33 +891,251 @@
             event.target.classList.add('active');
         }
 
-        function showModal(title, message) {
+        function showModal(modalType) {
+            if (modalType === 'addStock') {
+                document.getElementById('addStockModal').style.display = 'block';
+            } else if (modalType === 'addLoan') {
+                document.getElementById('addLoanModal').style.display = 'block';
+            } else if (modalType === 'addGoal') {
+                document.getElementById('addGoalModal').style.display = 'block';
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showAuth(type) {
+            const authContent = document.getElementById('authContent');
+            if (type === 'login') {
+                authContent.innerHTML = `
+                    <div class="auth-container">
+                        <h2>Login to Apexx</h2>
+                        <div class="auth-form">
+                            <input type="email" placeholder="Email" value="john.doe@apexx.com">
+                            <input type="password" placeholder="Password" value="••••••••">
+                            <button onclick="demoLogin()">Login</button>
+                        </div>
+                        <div class="auth-link" onclick="showAuth('register')">Don't have an account? Register here</div>
+                    </div>
+                `;
+            } else {
+                authContent.innerHTML = `
+                    <div class="auth-container">
+                        <h2>Register for Apexx</h2>
+                        <div class="auth-form">
+                            <input type="text" placeholder="First Name" value="John">
+                            <input type="text" placeholder="Last Name" value="Doe">
+                            <input type="email" placeholder="Email" value="john.doe@apexx.com">
+                            <input type="password" placeholder="Password" value="••••••••">
+                            <input type="password" placeholder="Confirm Password" value="••••••••">
+                            <button onclick="demoRegister()">Create Account</button>
+                        </div>
+                        <div class="auth-link" onclick="showAuth('login')">Already have an account? Login here</div>
+                    </div>
+                `;
+            }
+            document.getElementById('authModal').style.display = 'block';
+        }
+
+        function demoLogin() {
+            showConfirmModal('Login Successful', 'Welcome back, John! You have been successfully logged into your Apexx dashboard.');
+            closeModal('authModal');
+        }
+
+        function demoRegister() {
+            showConfirmModal('Account Created', 'Welcome to Apexx, John! Your account has been created successfully. You can now access all platform features.');
+            closeModal('authModal');
+        }
+
+        function addStock() {
+            const symbol = document.getElementById('stockSymbol').value.toUpperCase();
+            const shares = document.getElementById('stockShares').value;
+            const price = parseFloat(document.getElementById('stockPrice').value);
+            
+            if (symbol && shares && price) {
+                const tbody = document.getElementById('stockTableBody');
+                const currentPrice = (price * (0.9 + Math.random() * 0.2)).toFixed(2); // Random current price
+                const marketValue = (shares * currentPrice).toFixed(2);
+                const totalCost = (shares * price).toFixed(2);
+                const gainLoss = (marketValue - totalCost).toFixed(2);
+                const gainLossPercent = ((gainLoss / totalCost) * 100).toFixed(1);
+                const gainLossColor = gainLoss >= 0 ? '#00b894' : '#e17055';
+                const gainLossSign = gainLoss >= 0 ? '+' : '';
+                
+                const newRow = `
+                    <tr>
+                        <td><strong>${symbol}</strong> - ${getCompanyName(symbol)}</td>
+                        <td>${shares}</td>
+                        <td>$${price.toFixed(2)}</td>
+                        <td>$${currentPrice}</td>
+                        <td>$${marketValue}</td>
+                        <td style="color: ${gainLossColor}; font-weight: 600;">${gainLossSign}$${Math.abs(gainLoss)} (${gainLossSign}${gainLossPercent}%)</td>
+                    </tr>
+                `;
+                tbody.innerHTML += newRow;
+                
+                showConfirmModal('Stock Added', `${symbol} has been added to your portfolio with ${shares} shares at $${price.toFixed(2)} per share.`);
+                closeModal('addStockModal');
+                
+                // Clear form
+                document.getElementById('stockSymbol').value = '';
+                document.getElementById('stockShares').value = '';
+                document.getElementById('stockPrice').value = '';
+            }
+        }
+
+        function addLoan() {
+            const name = document.getElementById('loanName').value;
+            const type = document.getElementById('loanType').value;
+            const balance = parseFloat(document.getElementById('loanBalance').value);
+            const rate = parseFloat(document.getElementById('loanRate').value);
+            const payment = parseFloat(document.getElementById('loanPayment').value);
+            
+            if (name && balance && rate && payment) {
+                const typeIcons = {
+                    student: '🎓',
+                    auto: '��',
+                    mortgage: '🏠',
+                    personal: '💰',
+                    credit: '💳'
+                };
+                
+                const payoffDate = calculatePayoffDate(balance, payment, rate);
+                
+                const newCard = `
+                    <div class="card">
+                        <h3>${typeIcons[type]} ${name}</h3>
+                        <div class="metric">
+                            <span class="metric-label">Balance</span>
+                            <span class="metric-value negative large-number">$${balance.toLocaleString()}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Interest Rate</span>
+                            <span class="metric-value">${rate}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Monthly Payment</span>
+                            <span class="metric-value negative">$${payment}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Payoff Date</span>
+                            <span class="metric-value">${payoffDate}</span>
+                        </div>
+                        <button class="button success" onclick="makePayment('${type}')">Make Payment</button>
+                    </div>
+                `;
+                
+                document.getElementById('loansGrid').innerHTML += newCard;
+                showConfirmModal('Loan Added', `${name} has been added to your loan portfolio with a balance of $${balance.toLocaleString()}.`);
+                closeModal('addLoanModal');
+                
+                // Clear form
+                document.getElementById('loanName').value = '';
+                document.getElementById('loanBalance').value = '';
+                document.getElementById('loanRate').value = '';
+                document.getElementById('loanPayment').value = '';
+            }
+        }
+
+        function addGoal() {
+            const name = document.getElementById('goalName').value;
+            const type = document.getElementById('goalType').value;
+            const target = parseFloat(document.getElementById('goalTarget').value);
+            const current = parseFloat(document.getElementById('goalCurrent').value);
+            const date = document.getElementById('goalDate').value;
+            const monthly = parseFloat(document.getElementById('goalMonthly').value);
+            
+            if (name && target && date) {
+                const progress = ((current || 0) / target * 100).toFixed(0);
+                const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long' 
+                });
+                
+                const newCard = `
+                    <div class="card">
+                        <h3>${type} ${name}</h3>
+                        <div class="metric">
+                            <span class="metric-label">Target Amount</span>
+                            <span class="metric-value">$${target.toLocaleString()}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Current Progress</span>
+                            <span class="metric-value positive">$${(current || 0).toLocaleString()} (${progress}%)</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Monthly Savings</span>
+                            <span class="metric-value">$${monthly || 0}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Target Date</span>
+                            <span class="metric-value">${formattedDate}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%;"></div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('goalsGrid').innerHTML += newCard;
+                showConfirmModal('Goal Added', `${name} has been added to your financial goals with a target of $${target.toLocaleString()}.`);
+                closeModal('addGoalModal');
+                
+                // Clear form
+                document.getElementById('goalName').value = '';
+                document.getElementById('goalTarget').value = '';
+                document.getElementById('goalCurrent').value = '';
+                document.getElementById('goalDate').value = '';
+                document.getElementById('goalMonthly').value = '';
+            }
+        }
+
+        function showConfirmModal(title, message) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalMessage').textContent = message;
             document.getElementById('confirmModal').style.display = 'block';
         }
 
-        function closeModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-        }
-
         function makePayment(loanType) {
             const loanName = loanType === 'student' ? 'Student Loan' : 'Auto Loan';
             const amount = loanType === 'student' ? '$295' : '$385';
-            showModal('Payment Processed', `Your ${amount} payment for ${loanName} has been successfully processed. Updated balance will be reflected in your dashboard.`);
+            showConfirmModal('Payment Processed', `Your ${amount} payment for ${loanName} has been successfully processed. Updated balance will be reflected in your dashboard.`);
         }
 
         function optimizeStrategy() {
-            showModal('Strategy Optimization', 'Debt payoff strategy has been optimized! Based on your current debts, the Debt Avalanche method will save you $2,340 in interest and 8 months of payments.');
+            showConfirmModal('Strategy Optimization', 'Debt payoff strategy has been optimized! Based on your current debts, the Debt Avalanche method will save you $2,340 in interest and 8 months of payments.');
         }
 
         function applyStrategy(strategyType) {
             const strategyName = strategyType === 'avalanche' ? 'Debt Avalanche' : 'Debt Snowball';
-            showModal('Strategy Applied', `${strategyName} strategy has been applied to your debt management plan. Your payment schedule has been updated accordingly.`);
+            showConfirmModal('Strategy Applied', `${strategyName} strategy has been applied to your debt management plan. Your payment schedule has been updated accordingly.`);
         }
 
         function implementPlan() {
-            showModal('Investment Plan Implemented', 'Your optimal investment allocation plan has been implemented. Automatic monthly investments of $2,000 will be distributed according to your optimized strategy.');
+            showConfirmModal('Investment Plan Implemented', 'Your optimal investment allocation plan has been implemented. Automatic monthly investments of $2,000 will be distributed according to your optimized strategy.');
+        }
+
+        function getCompanyName(symbol) {
+            const companies = {
+                'AAPL': 'Apple Inc.',
+                'GOOGL': 'Alphabet Inc.',
+                'MSFT': 'Microsoft Corp.',
+                'TSLA': 'Tesla Inc.',
+                'NVDA': 'NVIDIA Corp.',
+                'AMZN': 'Amazon.com Inc.',
+                'META': 'Meta Platforms Inc.',
+                'NFLX': 'Netflix Inc.'
+            };
+            return companies[symbol] || 'Unknown Company';
+        }
+
+        function calculatePayoffDate(balance, payment, rate) {
+            const monthlyRate = rate / 100 / 12;
+            const months = Math.ceil(Math.log(1 + (balance * monthlyRate) / payment) / Math.log(1 + monthlyRate));
+            const date = new Date();
+            date.setMonth(date.getMonth() + months);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
         }
 
         async function testHealth() {
@@ -701,10 +1186,13 @@
 
         // Close modal when clicking outside of it
         window.onclick = function(event) {
-            const modal = document.getElementById('confirmModal');
-            if (event.target == modal) {
-                closeModal();
-            }
+            const modals = ['confirmModal', 'addStockModal', 'addLoanModal', 'addGoalModal', 'authModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target == modal) {
+                    closeModal(modalId);
+                }
+            });
         }
     </script>
 </body>
