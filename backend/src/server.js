@@ -14,6 +14,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files
+app.use(express.static('public'));
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/portfolio', portfolioRoutes);
